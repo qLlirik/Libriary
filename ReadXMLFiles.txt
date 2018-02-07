@@ -1,0 +1,37 @@
+public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
+
+        private void asdf(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "XML Files|*.xml";
+            if (ofd.ShowDialog() == true)
+            {
+                tbxFileName.Text = ofd.FileName;
+
+                XmlDocument doc = new XmlDocument();
+                doc.Load(tbxFileName.Text);
+			//XmlNode reqired
+                foreach(XmlNode i in doc.DocumentElement)
+                {
+			//lv - ListView 
+                    lv.Items.Add(new Employee { 
+			Name = i.Attributes[0].Value, // <Employee name = "Ivan" (<- this)> ... </Emploee>
+			Age = int.Parse(i["Age"].InnerText), // <Employee name = "Ivan" > ... (<-this) </Emploee>
+			Special = i["Special"].InnerText // too
+			});
+                }
+            }
+        }
+    }
+    // help class
+    class Employee
+    {
+        public string Name { get; set; }
+        public int Age { get; set; }
+        public string Special { get; set; }
+    }
